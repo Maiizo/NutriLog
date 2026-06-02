@@ -16,9 +16,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.chelsea.nutrilog.auth.AuthViewModel
-import com.chelsea.nutrilog.auth.LoginScreen
-import com.chelsea.nutrilog.auth.RegisterScreen
+import com.chelsea.nutrilog.auth.viewmodel.AuthViewModel
+import com.chelsea.nutrilog.auth.viewmodel.AuthState
+import com.chelsea.nutrilog.auth.ui.LoginScreen
+import com.chelsea.nutrilog.auth.ui.RegisterScreen
 import com.chelsea.nutrilog.dashboard.DashboardScreen
 import com.chelsea.nutrilog.dashboard.DashboardViewModel
 import com.chelsea.nutrilog.foodLog.FoodLogScreen
@@ -29,12 +30,11 @@ import com.chelsea.nutrilog.foodLog.FoodViewModel
 fun NutriLogApp() {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = hiltViewModel()
-    val authState by authViewModel.uiState.collectAsState()
-    
-    if (authState.isLoggedIn) {
-        AppWithNavigation(navController, authViewModel)
-    } else {
-        AuthNavigation(navController, authViewModel)
+    val authState by authViewModel.authState.collectAsState(initial = AuthState.Idle)
+
+    when (authState) {
+        is AuthState.Success -> AppWithNavigation(navController, authViewModel)
+        else -> AuthNavigation(navController, authViewModel)
     }
 }
 
@@ -45,7 +45,12 @@ fun AuthNavigation(navController: NavHostController, authViewModel: AuthViewMode
         composable("login") {
             LoginScreen(
                 viewModel = authViewModel,
-                onLoginSuccess = {
+                onNavigateToUserDashboard = {
+                    navController.navigate("dashboard") {
+                        popUpTo("login") { inclusive = true }
+                    }
+                },
+                onNavigateToAdminDashboard = {
                     navController.navigate("dashboard") {
                         popUpTo("login") { inclusive = true }
                     }
