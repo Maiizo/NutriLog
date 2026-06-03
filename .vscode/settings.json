@@ -1,0 +1,7 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "npm run db:setup": true,
+        "npm run db:seed": true
+    },
+    "java.configuration.updateBuildConfiguration": "interactive"
+}
