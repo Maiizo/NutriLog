@@ -30,7 +30,9 @@ class TokenInterceptor(private val context: Context) : Interceptor {
 }
 
 object ApiClient {
-    private const val BASE_URL = "http://192.168.1.1:8000/api/" // Ganti dengan IP server Anda
+    private const val BASE_URL = "http://10.0.2.2:5432/api/" // Emulator: localhost -> 10.0.2.2, Port 8000 (sesuai backend)
+    // Untuk device fisik, ganti ke:
+    // private const val BASE_URL = "http://192.168.1.XXX:8000/api/" (sesuaikan IP server)
     
     fun createRetrofit(context: Context): Retrofit {
         val gson: Gson = GsonBuilder()

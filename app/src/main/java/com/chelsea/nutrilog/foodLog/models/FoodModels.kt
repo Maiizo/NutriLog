@@ -1,12 +1,14 @@
 package com.chelsea.nutrilog.foodLog.models
 
+import com.google.gson.annotations.SerializedName
+
 data class Food(
-    val foodId: Int,
-    val name: String,
-    val caloriesPerServing: Double,
-    val proteinG: Double,
-    val fatG: Double,
-    val carbsG: Double
+    @SerializedName("food_id") val foodId: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("calories_per_serving") val caloriesPerServing: Double,
+    @SerializedName("protein_g") val proteinG: Double,
+    @SerializedName("fat_g") val fatG: Double,
+    @SerializedName("carbs_g") val carbsG: Double
 )
 
 data class FoodProposal(
@@ -31,7 +33,10 @@ data class DailyLog(
     val userId: Int,
     val date: String,
     val items: List<LogItem> = emptyList(),
-    val totalCaloriesConsumed: Double = 0.0
+    val totalCaloriesConsumed: Double = 0.0,
+    val totalProtein: Double = 0.0,
+    val totalFat: Double = 0.0,
+    val totalCarbs: Double = 0.0
 )
 
 data class CreateFoodLogRequest(

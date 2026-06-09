@@ -2,38 +2,32 @@ package com.chelsea.nutrilog.auth.models
 
 data class LoginRequest(
     val email: String,
-    val passwordHash: String // Note: Hashing should be done before sending, or handled securely via HTTPS
+    val password: String
+)
+
+data class RegisterRequest(
+    val email: String,
+    val password: String,
+    val name: String,
+    val age: Int,
+    val weight: Float,
+    val height: Float,
+    val gender: String
 )
 
 data class AuthResponse(
     val token: String,
-    val user: User
+    val user: UserDTO
 )
 
-data class User(
-    val userId: Int,
-    val email: String,
-    val role: String // "Admin" or "User"
-)
-
-// Added missing types expected by ApiService
-
-data class RegisterRequest(
-    val email: String,
-    val passwordHash: String,
-    val role: String = "User"
-)
-
-// UserDTO is used by ApiService; make it compatible with User
 data class UserDTO(
     val userId: Int,
     val email: String,
-    val role: String
-)
-
-data class HealthProfileRequest(
+    val name: String,
     val age: Int,
+    val weight: Float,
+    val height: Float,
     val gender: String,
-    val weightKg: Float,
-    val heightCm: Float
+    val role: String,
+    val createdAt: String? = null
 )
