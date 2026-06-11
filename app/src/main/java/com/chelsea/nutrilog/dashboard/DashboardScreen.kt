@@ -45,6 +45,7 @@ fun DashboardScreen(
             ) {
                 uiState.summary?.let { summary ->
                     // 1. TODAY'S CALORIE CARD WITH PROGRESS
+                    // Calories Card
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -246,6 +247,66 @@ fun DashboardScreen(
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 4.dp
                         )
+                                "Today's Calories",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = Color.Gray
+                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column {
+                                    Text(
+                                        "${summary.todayCalories.toInt()} kcal",
+                                        style = MaterialTheme.typography.headlineSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFF2E7D32)
+                                    )
+                                    Text(
+                                        "Target: ${summary.targetCalories.toInt()} kcal",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = Color.Gray
+                                    )
+                                }
+                                
+                                // Progress Circle
+                                CircularProgressIndicator(
+                                    progress = { (summary.todayCalories / summary.targetCalories).toFloat().coerceIn(0f, 1f) },
+                                    modifier = Modifier.size(80.dp),
+                                    color = Color(0xFF4CAF50),
+                                    trackColor = Color.LightGray
+                                )
+                            }
+                        }
+                    }
+                    
+                    // BMR Card
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                "BMR (Basal Metabolic Rate)",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = Color.Gray
+                            )
+                            Text(
+                                "${summary.bmr.toInt()} kcal/day",
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF4CAF50)
+                            )
+                        }
+                    }
+                    
+                    // Health Profile Card
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp)
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
@@ -269,6 +330,24 @@ fun DashboardScreen(
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(bottom = 12.dp, top = 8.dp)
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                            
+                            val profile = summary.healthProfile
+                            ProfileRow("Age", "${profile.age} years")
+                            ProfileRow("Gender", profile.gender)
+                            ProfileRow("Weight", "${profile.weightKg} kg")
+                            ProfileRow("Height", "${profile.heightCm} cm")
+                        }
+                    }
+                    
+                    // History Filter
+                    Text(
+                        "Nutrition History",
+                        style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier.padding(bottom = 8.dp)
                     )
                     
                     Row(
@@ -342,6 +421,44 @@ fun DashboardScreen(
                                     Divider(
                                         modifier = Modifier.padding(vertical = 8.dp),
                                         color = Color.LightGray
+                    // Nutrition Data List
+                    if (uiState.nutritionData.isNotEmpty()) {
+                        Text(
+                            "Calorie Trends",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        
+                        uiState.nutritionData.forEach { data ->
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 4.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(12.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Column {
+                                        Text(
+                                            data.date,
+                                            style = MaterialTheme.typography.labelMedium,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        Text(
+                                            "P: ${data.protein.toInt()}g | F: ${data.fat.toInt()}g | C: ${data.carbs.toInt()}g",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = Color.Gray
+                                        )
+                                    }
+                                    Text(
+                                        "${data.calories.toInt()} kcal",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = Color(0xFF4CAF50),
+                                        fontWeight = FontWeight.Bold
                                     )
                                 }
                             }
@@ -480,5 +597,14 @@ fun FoodItemRow(item: Any) {
             color = Color(0xFF4CAF50),
             fontWeight = FontWeight.Bold
         )
+fun ProfileRow(label: String, value: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(label, style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+        Text(value, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
     }
 }

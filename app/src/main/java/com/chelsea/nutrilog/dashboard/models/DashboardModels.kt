@@ -11,6 +11,8 @@ data class DashboardSummary(
     val macronutrients: MacronutrientsDTO,
     val todayItems: List<FoodItemDTO> = emptyList(),
     val recentLogs: List<DailyLog> = emptyList()
+    val healthProfile: HealthProfileDTO,
+    val recentLogs: List<DailyLog>
 )
 
 data class HealthProfileDTO(
