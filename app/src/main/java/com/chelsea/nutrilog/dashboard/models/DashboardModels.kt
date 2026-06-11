@@ -6,6 +6,11 @@ data class DashboardSummary(
     val todayCalories: Double,
     val targetCalories: Double,
     val bmr: Double,
+    val caloriesRemaining: Double,
+    val healthProfile: HealthProfileDTO,
+    val macronutrients: MacronutrientsDTO,
+    val todayItems: List<FoodItemDTO> = emptyList(),
+    val recentLogs: List<DailyLog> = emptyList()
     val healthProfile: HealthProfileDTO,
     val recentLogs: List<DailyLog>
 )
@@ -18,6 +23,24 @@ data class HealthProfileDTO(
     val heightCm: Float,
     val dailyTargetCalories: Double,
     val bmrResult: Double
+)
+
+data class MacronutrientsDTO(
+    val protein: Double = 0.0,
+    val fat: Double = 0.0,
+    val carbs: Double = 0.0
+)
+
+data class FoodItemDTO(
+    val itemId: Int,
+    val foodId: Int,
+    val name: String,
+    val servingQuantity: Float,
+    val consumedCalories: Double,
+    val caloriesPerServing: Double,
+    val proteinG: Double,
+    val fatG: Double,
+    val carbsG: Double
 )
 
 data class NutritionDataPoint(
